@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ตอบมาดิ 😏</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg-1: #fdfbff;
+      --bg-2: #eafff8;
+      --bg-3: #fff1f6;
+
+      --text-main: #1a1a1a;
+      --text-dim: #6b6b6b;
+
+      --mint-main: #5fe0c8;
+      --mint-dark: #087a66;
+      --mint-soft: #d9fff6;
+
+      --no-main: #ff6b9f;
+      --no-dark: #9b0037;
+
+      --radius-card: 1.25rem;
+      --radius-btn: 0.9rem;
+
+      --overlay-bg: radial-gradient(circle at 30% 30%, #eafff8 0%, #ffffff 60%);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh; /* มือถือจะไม่โดนตัดตอนมีแถบ URL */
+      font-family: "Prompt", system-ui, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 15% 20%, var(--bg-2) 0%, transparent 60%),
+        radial-gradient(circle at 85% 30%, var(--bg-3) 0%, transparent 60%),
+        radial-gradient(circle at 50% 80%, #eefbff 0%, transparent 60%),
+        var(--bg-1);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 1.5rem clamp(1rem, 2vw, 2rem) calc(env(safe-area-inset-bottom) + 1.5rem);
+    }
+
+    /* กลุ่มแสงด้านหลัง */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: floaty 6s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .blob.mint {
+      width: min(70vw, 320px);
+      height: min(70vw, 320px);
+      background: radial-gradient(circle at 30% 30%, var(--mint-main) 0%, transparent 70%);
+      left: max(5vw, 16px);
+      top: 8vh;
+      box-shadow: 0 0 120px 40px rgba(95, 224, 200, 0.4);
+    }
+
+    .blob.pink {
+      width: min(60vw, 280px);
+      height: min(60vw, 280px);
+      background: radial-gradient(circle at 30% 30%, var(--no-main) 0%, transparent 70%);
+      right: max(5vw, 16px);
+      bottom: 8vh;
+      box-shadow: 0 0 120px 40px rgba(255, 107, 159, 0.25);
+      animation-delay: 1.5s;
+    }
+
+    @keyframes floaty {
+      0%   { transform: translateY(0) scale(1); }
+      50%  { transform: translateY(-20px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* การ์ดหลัก */
+    .card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-radius: var(--radius-card);
+      box-shadow:
+        0 40px 120px -10px rgba(0, 0, 0, 0.22),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 420px;
+      padding: clamp(1.25rem, 2vw, 2rem) 1.25rem 1.25rem;
+      text-align: center;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: transform 0.15s ease;
+    }
+
+    /* shake ตอนโดนปฏิเสธ */
+    .card.shake {
+      animation: shake 0.4s linear;
+    }
+    @keyframes shake {
+      0% { transform: translate(0,0) rotate(0deg); }
+      20% { transform: translate(-4px,2px) rotate(-1deg); }
+      40% { transform: translate(4px,-2px) rotate(1deg); }
+      60% { transform: translate(-3px,1px) rotate(0deg); }
+      80% { transform: translate(3px,0px) rotate(1deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--mint-soft);
+      color: var(--mint-dark);
+      font-size: clamp(0.7rem, 1vw, 0.8rem);
+      font-weight: 500;
+      line-height: 1.2;
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(8, 122, 102, 0.1);
+      box-shadow: 0 8px 20px rgba(95, 224, 200, 0.4);
+      margin-bottom: 1rem;
+    }
+
+    /* รูปเพื่อน */
+    .avatar-wrap {
+      width: clamp(80px, 22vw, 110px);
+      height: clamp(80px, 22vw, 110px);
+      border-radius: 1rem;
+      overflow: hidden;
+      margin: 0 auto 1rem auto;
+      box-shadow:
+        0 25px 40px -8px rgba(0, 0, 0, 0.28),
+        0 4px 10px rgba(0, 0, 0, 0.18),
+        0 0 30px rgba(95, 224, 200, 0.4);
+      border: 3px solid #fff;
+      background-color: #fff;
+      position: relative;
+    }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tag-target {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      background: #000;
+      color: #fff;
+      font-size: clamp(0.55rem, 1vw, 0.6rem);
+      font-weight: 500;
+      padding: 0.25rem 0.4rem;
+      border-radius: 0.4rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,.4);
+      line-height: 1.1;
+    }
+
+    .question {
+      font-size: clamp(1.3rem, 1.2vw + 1rem, 1.8rem);
+      font-weight: 600;
+      line-height: 1.3;
+      color: #000;
+      margin-bottom: 0.5rem;
+      word-break: keep-all;
+    }
+
+    .subtext {
+      font-size: clamp(0.8rem, 0.4vw + 0.7rem, 0.9rem);
+      line-height: 1.5;
+      color: var(--text-dim);
+      min-height: 2.2em;
+      padding: 0 0.5rem;
+    }
+
+    /* ปุ่ม */
+    .actions {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem 1rem;
+      position: relative;
+      z-index: 20;
+      min-height: 4.5rem; /* ให้มีพื้นที่เผื่อปุ่ม "ไม่" หนีในจอเล็ก */
+    }
+
+    button.choice {
+      appearance: none;
+      border: none;
+      border-radius: var(--radius-btn);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: clamp(1rem, 0.4vw + .8rem, 1.05rem);
+      line-height: 1.2;
+      padding: clamp(0.8rem, 1vw, 0.9rem) clamp(1rem, 2vw, 1.2rem);
+      min-width: clamp(120px, 40vw, 150px); /* ปุ่มใหญ่แตะง่ายในมือถือ */
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      box-shadow:
+        0 18px 40px -5px rgba(0, 0, 0, 0.22),
+        0 2px 6px rgba(0, 0, 0, 0.18);
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease,
+        left 0.2s ease,
+        top 0.2s ease;
+      will-change: transform, left, top;
+      user-select: none;
+      isolation: isolate;
+      touch-action: manipulation;
+    }
+
+    button.choice:active {
+      transform: scale(0.95) translateY(1px);
+      box-shadow:
+        0 10px 24px -4px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    #yesBtn {
+      background: radial-gradient(circle at 20% 20%, var(--mint-main) 0%, #a9ffee 80%);
+      color: var(--mint-dark);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      border: 2px solid rgba(8, 122, 102, 0.15);
+    }
+
+    #noBtn {
+      background: radial-gradient(circle at 20% 20%, var(--no-main) 0%, #ff9fc1 80%);
+      color: var(--no-dark);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      border: 2px solid rgba(155, 0, 55, 0.15);
+      position: relative;
+      max-width: 200px;
+    }
+
+    /* ปุ่ม "ใช่" โหมดโตครองจอ */
+    .yes-growing {
+      position: fixed !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform-origin: center center;
+      translate: -50% -50%;
+      z-index: 9999 !important;
+      min-width: unset !important;
+      border-radius: 1.2rem !important;
+      padding: 1rem 1.5rem !important;
+      transition:
+        transform 0.28s cubic-bezier(.16,1,.3,1),
+        box-shadow 0.28s cubic-bezier(.16,1,.3,1),
+        filter 0.28s cubic-bezier(.16,1,.3,1);
+      box-shadow:
+        0 80px 200px -10px rgba(95, 224, 200, 0.6),
+        0 18px 60px rgba(0, 0, 0, 0.4) !important;
+      animation: pulse 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { filter: brightness(1); }
+      to   { filter: brightness(1.2); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .yes-growing {
+        animation: none;
+      }
+      .blob {
+        animation: none;
+      }
+    }
+
+    /* overlay ปกติตอนจบ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay-bg);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1rem calc(env(safe-area-inset-bottom) + 2rem);
+      z-index: 10000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .overlay.show {
+      display: flex;
+    }
+
+    .overlay-main {
+      font-size: clamp(1.6rem, 1vw + 1.2rem, 2.2rem);
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--mint-dark);
+      text-shadow: 0 1px 0 rgba(255,255,255,.7);
+      max-width: 90%;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .overlay-sub {
+      font-size: clamp(0.9rem, 0.4vw + .8rem, 1rem);
+      line-height: 1.4;
+      color: #444;
+      margin-top: 1rem;
+      max-width: 90%;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .fx-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .confetti {
+      position: absolute;
+      font-size: clamp(1rem, 1vw + .6rem, 1.4rem);
+      opacity: 0;
+      animation: floatUp 2s ease-in forwards;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.6) rotate(-10deg);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
+      100% {
+        transform: translateY(-140px) scale(1.3) rotate(10deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    footer.credit {
+      margin-top: 1.5rem;
+      font-size: clamp(0.7rem, .3vw + .6rem, 0.8rem);
+      line-height: 1.4;
+      color: #9b9b9b;
+      user-select: none;
+    }
+
+    footer.credit strong {
+      color: var(--mint-dark);
+      font-weight: 600;
+    }
+
+    /* ====================== JUMPSCARE ====================== */
+    .jumpscare-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      z-index: 20000;
+      animation: scaryFlash 0.15s steps(2,end) infinite;
+      padding: 1rem 1rem calc(env(safe-area-inset-bottom) + 1rem);
+    }
+
+    .jumpscare-overlay.show {
+      display: flex;
+    }
+
+    @keyframes scaryFlash {
+      0%   { background:#000; }
+      50%  { background:#ff0000; }
+      100% { background:#000; }
+    }
+
+    .jumpscare-face {
+      width: min(80vw, 280px);
+      height: min(80vw, 280px);
+      border-radius: 0.5rem;
+      object-fit: cover;
+      box-shadow:
+        0 0 40px 10px rgba(255,0,0,.6),
+        0 20px 60px rgba(0,0,0,.9);
+      border: 4px solid #fff;
+    }
+
+    .jumpscare-text {
+      margin-top: 1rem;
+      font-size: clamp(1.3rem, 1vw + 1rem, 2rem);
+      font-weight: 700;
+      line-height: 1.3;
+      color: #fff;
+      text-shadow:
+        0 0 6px #000,
+        0 0 20px #ff0000,
+        0 0 40px #ff0000;
+      max-width: 90%;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .jumpscare-hint {
+      margin-top: .5rem;
+      font-size: clamp(.8rem, .4vw + .6rem, .9rem);
+      color: #fff;
+      opacity: .8;
+      text-align: center;
+    }
+    /* ======================================================= */
+
+    /* ปุ่ม stack 100% บนจอเล็กมาก (<360px) เพื่อกดง่าย */
+    @media (max-width: 360px) {
+      .actions {
+        flex-direction: column;
+        min-height: unset;
+      }
+      button.choice {
+        width: 100%;
+        min-width: unset;
+        max-width: 100%;
+      }
+      #noBtn {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- แสง background -->
+  <div class="blob mint" aria-hidden="true"></div>
+  <div class="blob pink" aria-hidden="true"></div>
+
+  <!-- การ์ดหลัก -->
+  <main class="card" id="card" role="dialog" aria-labelledby="q-heading" aria-describedby="q-desc">
+    <div class="eyebrow" id="q-heading">ตอบตามจริง 🧐</div>
+
+    <!-- รูปเพื่อน -->
+    <div class="avatar-wrap">
+      <!-- เปลี่ยน src เป็นรูปเพื่อนของจริงได้เลย -->
+      <img src="https://img.wongnai.com/p/1920x0/2017/05/19/9a13ee22d5714e329d642e8a6692a13e.jpg" alt="ภาพประกอบ" />
+      <div class="tag-target">TARGET</div>
+    </div>
+
+    <!-- คำถาม -->
+    <div class="question" id="mainQuestion">ชอบช็อกมิ้นไหม?</div>
+
+    <p class="subtext" id="q-desc">
+      เฉพาะบุคคลที่ได้รับเชิญเท่านั้น กรุณาตอบอย่างสุจริตใจ
+    </p>
+
+    <section class="actions" id="actions" aria-live="polite">
+      <button id="yesBtn" class="choice" aria-label="ใช่">ใช่ ✅</button>
+      <button id="noBtn" class="choice" aria-label="ไม่">ไม่ ❌</button>
+    </section>
+
+    <footer class="credit">
+      <div><strong>internal survey</strong></div>
+      <div>สร้างจากมุดดี้เองค้าบ</div>
+    </footer>
+  </main>
+
+  <!-- overlay ปกติ -->
+  <section
+    class="overlay"
+    id="overlay"
+    role="alertdialog"
+    aria-modal="true"
+    aria-live="assertive"
+  >
+    <div class="overlay-main" id="overlayText">
+      พี่ว่าละน้องชาย
+    </div>
+    <div class="overlay-sub">
+      ขอบคุณสำหรับการร่วมทดสอบระบบ
+    </div>
+
+    <div class="fx-layer" id="fxLayer" aria-hidden="true"></div>
+  </section>
+
+  <!-- overlay jumpscare -->
+  <section class="jumpscare-overlay" id="jumpscare">
+    <img
+      id="jumpscareImg"
+      class="jumpscare-face"
+      src=""
+      alt="คุณโดนจับได้แล้ว"
+    />
+    <div class="jumpscare-text" id="jumpscareText">5555 โดนจับแล้ว!!!!</div>
+    <div class="jumpscare-hint">(อย่าหนีความจริงนะครับคุณผู้ชม)</div>
+  </section>
+
+  <script>
+    /*************************************************
+     * ELEMENTS & STATE
+     *************************************************/
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const overlay = document.getElementById("overlay");
+    const fxLayer = document.getElementById("fxLayer");
+    const card = document.getElementById("card");
+    const actionsBoxEl = document.getElementById("actions");
+
+    const jumpscare = document.getElementById("jumpscare");
+    const jumpscareImg = document.getElementById("jumpscareImg");
+    const jumpscareText = document.getElementById("jumpscareText");
+
+    // 👇 ปรับรูป jumpscare / ข้อความ jumpscare ได้ตรงนี้
+    const jumpscareImgSrc = "https://i.imgur.com/2v0aN1N.png"; // ใส่หน้าตลกเพื่อน
+    const jumpscareMsg = "เฮ้ยยยย!! ใครให้กดไม่ 😡";
+
+    // state ปุ่มใช่โต
+    let yesScale = 1;
+    let yesRotation = 0;
+    let hasStartedGrowing = false;
+
+    // state ปุ่มไม่หนี
+    let dodgeCount = 0;
+
+    // param behavior
+    const AUTO_SHOW_SCALE = 16;     // ปุ่ม yes โตถึงจุดนี้ = จบปกติ
+    const JUMPSCARE_THRESHOLD = 5;  // หนีหลายครั้ง => jumpscare
+    let jumpscareTriggered = false;
+
+    const FX_EMOJIS = ["💖","🎉","✨","🔥","🤝","💅","✅","🫣","⭐"];
+
+    /*************************************************
+     * CONFETTI FX
+     *************************************************/
+    function spawnFxBurst(count = 24, delayGapMs = 40) {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const piece = document.createElement("div");
+          piece.className = "confetti";
+          piece.textContent = FX_EMOJIS[Math.floor(Math.random() * FX_EMOJIS.length)];
+
+          const xPercent = Math.random() * 80 + 10;
+          const yStartPx = Math.random() * 40 + 40;
+
+          piece.style.left = xPercent + "%";
+          piece.style.bottom = yStartPx + "px";
+
+          fxLayer.appendChild(piece);
+
+          setTimeout(() => {
+            piece.remove();
+          }, 2000);
+        }, i * delayGapMs);
+      }
+    }
+
+    /*************************************************
+     * SHOW NORMAL OVERLAY
+     *************************************************/
+    function showOverlay() {
+      overlay.classList.add("show");
+      spawnFxBurst();
+      const fxInterval = setInterval(() => spawnFxBurst(5,10), 500);
+      setTimeout(() => clearInterval(fxInterval), 4000);
+    }
+
+    /*************************************************
+     * SHOW JUMPSCARE OVERLAY
+     *************************************************/
+    function showJumpscare() {
+      if (jumpscareTriggered) return;
+      jumpscareTriggered = true;
+
+      // ตั้งรูป / ข้อความ
+      jumpscareImg.src = jumpscareImgSrc;
+      jumpscareText.textContent = jumpscareMsg;
+
+      jumpscare.classList.add("show");
+
+      // ปิด jumpscare แล้วเข้า overlay ปกติ
+      setTimeout(() => {
+        jumpscare.classList.remove("show");
+        showOverlay();
+      }, 1500);
+    }
+
+    /*************************************************
+     * YES CLICK = จบดี
+     *************************************************/
+    yesBtn.addEventListener("click", () => {
+      showOverlay();
+    });
+
+    /*************************************************
+     * NO CLICK = ทำปุ่ม YES โต + เขย่า + ขู่
+     *************************************************/
+    noBtn.addEventListener("click", () => {
+      // เริ่มโหมดปุ่มใช่โต
+      if (!hasStartedGrowing) {
+        hasStartedGrowing = true;
+        yesBtn.classList.add("yes-growing");
+      }
+
+      // ปุ่ม "ใช่" โต
+      yesScale *= 1.6;
+      yesRotation += (Math.random() * 16 - 8);
+
+      if (yesScale >= AUTO_SHOW_SCALE && !jumpscareTriggered) {
+        showOverlay();
+      }
+
+      yesBtn.style.transform =
+        `translate(-50%, -50%) scale(${yesScale}) rotate(${yesRotation}deg)`;
+
+      const glow = Math.min(yesScale / 2, 24);
+      yesBtn.style.boxShadow = `
+        0 ${4 * glow}px ${10 * glow}px rgba(95, 224, 200, 0.55),
+        0 ${1.5 * glow}px ${4 * glow}px rgba(0,0,0,0.45)
+      `;
+
+      // สั่นการ์ด+เปลี่ยนข้อความ
+      dodgeCount++;
+      card.classList.add("shake");
+
+      const subtextEl = document.getElementById("q-desc");
+      const oldText = subtextEl.textContent;
+
+      subtextEl.textContent = (dodgeCount % 2 === 0)
+        ? "ระบบจะรายงานผู้ปกครองนะครับ 🤨"
+        : "ใจเย็นดิๆๆๆๆๆ 😳";
+
+      setTimeout(() => {
+        card.classList.remove("shake");
+        setTimeout(() => {
+          subtextEl.textContent = oldText;
+        }, 1000);
+      }, 400);
+
+      // ถ้าดื้อไม่ยอมจริง ๆ → jumpscare
+      if (dodgeCount >= JUMPSCARE_THRESHOLD) {
+        showJumpscare();
+      }
+    });
+
+    /*************************************************
+     * ปุ่ม "ไม่" หนี (desktop hover / mobile touch)
+     *************************************************/
+    function dodgeNoButton() {
+      dodgeCount++;
+
+      // ถ้าหนีหลายครั้ง เริ่มโหมดปุ่มใช่โตเลย
+      if (dodgeCount > 3 && !hasStartedGrowing) {
+        hasStartedGrowing = true;
+        yesBtn.classList.add("yes-growing");
+      }
+
+      // ถ้าพยายามหนีเยอะมาก → jumpscare
+      if (dodgeCount >= JUMPSCARE_THRESHOLD) {
+        showJumpscare();
+      }
+
+      // กล่อง action ใช้เป็นขอบเขตหนี เพื่อไม่ให้ปุ่มหลุดขอบจอเล็ก
+      const boxRect = actionsBoxEl.getBoundingClientRect();
+
+      const maxX = boxRect.width - noBtn.offsetWidth;
+      const maxY = boxRect.height - noBtn.offsetHeight;
+
+      // สุ่มตำแหน่งใหม่ภายในกรอบ
+      const randX = Math.max(0, Math.min(maxX, Math.random() * maxX));
+      const randY = Math.max(0, Math.min(maxY, Math.random() * maxY));
+
+      // ทำเป็น absolute ชั่วคราวเพื่อขยับปุ่ม
+      noBtn.style.position = "absolute";
+      noBtn.style.left = randX + "px";
+      noBtn.style.top = randY + "px";
+    }
+
+    // Desktop: ถ้าเอาเมาส์ไปใกล้ปุ่ม "ไม่" => หนี
+    noBtn.addEventListener("mouseenter", () => {
+      // ถ้าจอใหญ่มากพอปุ่มจะหนี mouse
+      if (window.matchMedia("(hover: hover)").matches) {
+        dodgeNoButton();
+      }
+    });
+
+    // Mobile: แตะจะไม่กดได้ ปุ่มหนีก่อน
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      dodgeNoButton();
+    }, { passive: false });
+
+    /*************************************************
+     * resize -> รักษาสเกลปุ่ม yes ที่กำลังโต
+     *************************************************/
+    window.addEventListener("resize", () => {
+      if (hasStartedGrowing) {
+        yesBtn.style.transform =
+          `translate(-50%, -50%) scale(${yesScale}) rotate(${yesRotation}deg)`;
+      }
+    });
+  </script>
+</body>
+</html>
